@@ -29,7 +29,8 @@ public class ContestServer {
     public Integer get_bid(List<Integer> offer, Map state) {
         log.info("get_bid");
         log.info(offer.toString());
-        return new Integer((int)Math.random() * 3);
+        return new Integer(4);
+        //(int)Math.random() * 3);
     }
 
     public Integer make_choice(List<Integer> offer, Map state) {
