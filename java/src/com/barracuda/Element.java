@@ -1,6 +1,7 @@
 package com.barracuda;
 
 import java.util.*;
+import java.io.*;
 
 public class Element {
     
@@ -26,6 +27,7 @@ public class Element {
         
         for(int i = 0; i < 7; i++) {
             for(int j = 0; j < 7; j++) {
+                //System.out.println(i+", "+j+", "+board[i][j]+"=="+ value);
                 if (board[i][j] == value) {
                     //Leave for loop
                     x = i;

@@ -13,15 +13,16 @@ import com.barracuda.Bidding.GameMode;
 
 import java.lang.Math;
 import java.util.*;
+import java.io.*;
 
 public class ContestServer {
     
     Bidding bet = new Bidding();
-    public int player_num;
+    int player_num;
     GameMode gamemode;
     
-    private int[][] ref_board = new int[7][7];
-    private int[][] place_board = new int[7][7];
+    public int[][] ref_board = new int[7][7];
+    public int[][] place_board = new int[7][7];
     
     //occupancy lists
     List<Integer> own_occ = new ArrayList<>();
@@ -39,27 +40,18 @@ public class ContestServer {
         log.info("init_game");
         log.info(state.toString());
         
-        player_num = (int) state.get("idx");
-        gamemode = GameMode.start;
-        
-        ref_board = get_board(state, "board", 7, 7);
-        log.info("Board: ");
-        debug_table(ref_board);
-        
-        
-        //zero out own
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
-                place_board[i][j] = -1;
-            }
-        }
-        
+        System.out.print("init player_num: " + player_num);
+
         return 0;
     }
 
     public Integer get_bid(List<Integer> offer, Map state) {
         log.info("get_bid");
         log.info(offer.toString());
+        
+        get_vars(offer, state);
+        
+        System.out.print("playernum: " + player_num);
         
         get_begin_var(state, (int) state.get("idx"));
         
@@ -70,34 +62,14 @@ public class ContestServer {
 
     public Integer make_choice(List<Integer> offer, Map state) {
         log.info("make_choice");
+        get_vars(offer, state);
+        
         return offer.get(0);
     }
 
     public int move_result(Map result) {
         log.info("move_result");
         log.info(result.toString());
-        
-        Element choice_elt;
-        
-        if (result.get("result") == "you_choose")
-        {
-            own_occ.add((Integer) result.get("choice"));
-            choice_elt = new Element(0, (int)result.get("choice"), ref_board);
-        }
-        else if (result.get("result") == "opponent_choose")
-        {
-            opp_occ.add((Integer) result.get("choice"));
-            choice_elt = new Element(1, (int)result.get("choice"), ref_board);
-            bet.end_round_calc();
-        }
-        //Tie
-        else{
-            choice_elt = new Element(-1, (int)result.get("choice"), ref_board);
-        }
-        
-        //Check if choice_elt is set
-        place_board[choice_elt.x][choice_elt.y] = choice_elt.owner;
-        debug_table(place_board);
         
         return 0;
     }
@@ -109,7 +81,7 @@ public class ContestServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 9998;
+        int port = 9995;
         WebServer webServer = new WebServer(port);
         XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
         PropertyHandlerMapping phm = new PropertyHandlerMapping();
@@ -133,22 +105,19 @@ public class ContestServer {
             }
             output += '\n';
         }
-        log.info(output);
+        System.out.print(output);
     }
     
     //EFFECT: Returns 7x7 board
-    public int[][] get_board(Map state, String type, int x, int y) {
-        
-        int[][] temp_board = new int[x][y];
-        
+    public void get_board(Map state, String type, int x, int y) {
+                
         Object[] all = (Object[]) state.get(type);
         for( int i = 0; i < x; i++) {
             Object[] row = (Object[]) all[i];
             for( int j = 0; j < y; j++) {
-                temp_board[i][j] = (Integer) row[j];
+                ref_board[i][j] = (int) row[j];
             }
         }
-        return temp_board;
     }
     
     //Called at the beginning of each round
@@ -159,5 +128,37 @@ public class ContestServer {
             gamemode = GameMode.middle;
         }
         bet.set_things(gamemode, playernum ,(int) state.get("turn"), (int) state.get("credits"));    
+    }
+    
+    public void get_vars(List<Integer> offer, Map state) {
+        
+        player_num = (int) state.get("idx");
+        gamemode = GameMode.start;
+
+        get_board(state, "board", 7, 7);
+        
+        //zero out own
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                place_board[i][j] = -1;
+            }
+        }
+        
+        //Get
+        Element temp_elt;
+        int j;
+        Object[] all = (Object[]) state.get("owned_squares");
+        for (int i = 0; i < 2; i++) {
+            Object[] row = (Object[]) all[i];
+            j = 0;
+            while (row != null && row[j] != null ) {
+                temp_elt = new Element(i, (int)row[j], ref_board);
+                place_board[temp_elt.x][temp_elt.y] = i;
+                j++;
+            }
+        }
+        
+        debug_table(place_board);
+        
     }
 }
