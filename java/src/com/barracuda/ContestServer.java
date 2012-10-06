@@ -27,22 +27,9 @@ public class ContestServer {
         log.info("init_game");
         log.info(state.toString());
         
-        Object[] all = (Object[]) state.get("board");
-        for( int i = 0; i < 7; i++) {
-            Object[] row = (Object[]) all[i];
-            for( int j = 0; j < 7; j++) {
-                board[i][j] = (Integer) row[j];
-            }
-        }
-        
-        String output = "" + '\n';
-        for (int[] row : board) {
-            for (int cell : row) {
-                output += cell + ", ";
-            }
-            output += '\n';
-        }
-        log.info(output);
+        board = get_board(state);
+        log.info("Board: ");
+        debug_table(board);
         
         return 0;
     }
@@ -71,7 +58,7 @@ public class ContestServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 9997;
+        int port = 9999;
         WebServer webServer = new WebServer(port);
         XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
         PropertyHandlerMapping phm = new PropertyHandlerMapping();
@@ -84,5 +71,32 @@ public class ContestServer {
         log.info("starting XML-RPC server at /RPC2 on port " + port);
         webServer.start();
         
+    }
+    
+    public void debug_table(int[][] b) {
+     
+        String output = "" + '\n';
+        for (int[] row : b) {
+            for (int cell : row) {
+                output += cell + ", ";
+            }
+            output += '\n';
+        }
+        log.info(output);
+    }
+    
+    //EFFECT: Returns 7x7 board
+    public int[][] get_board(Map state) {
+        
+        int[][] temp_board = new int[7][7];
+        
+        Object[] all = (Object[]) state.get("board");
+        for( int i = 0; i < 7; i++) {
+            Object[] row = (Object[]) all[i];
+            for( int j = 0; j < 7; j++) {
+                temp_board[i][j] = (Integer) row[j];
+            }
+        }
+        return temp_board;
     }
 }
