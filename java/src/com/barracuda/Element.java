@@ -4,7 +4,11 @@ import java.util.*;
 
 public class Element {
     
+    //-1 is empty
+    //0 is self owned
+    //1 is opp owned
     public int owner;
+    
     public int value;
     
     //x is vertical

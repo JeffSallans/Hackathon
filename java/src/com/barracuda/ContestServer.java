@@ -50,7 +50,7 @@ public class ContestServer {
         //zero out own
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
-                place_board[i][j] = 0;
+                place_board[i][j] = -1;
             }
         }
         
@@ -77,17 +77,27 @@ public class ContestServer {
         log.info("move_result");
         log.info(result.toString());
         
-  
+        Element choice_elt;
+        
         if (result.get("result") == "you_choose")
         {
             own_occ.add((Integer) result.get("choice"));
-
+            choice_elt = new Element(0, (int)result.get("choice"), ref_board);
         }
         else if (result.get("result") == "opponent_choose")
         {
             opp_occ.add((Integer) result.get("choice"));
+            choice_elt = new Element(1, (int)result.get("choice"), ref_board);
             bet.end_round_calc();
         }
+        //Tie
+        else{
+            choice_elt = new Element(-1, (int)result.get("choice"), ref_board);
+        }
+        
+        //Check if choice_elt is set
+        place_board[choice_elt.x][choice_elt.y] = choice_elt.owner;
+        debug_table(place_board);
         
         return 0;
     }
