@@ -33,6 +33,13 @@ public class ContestServer {
         log.info("Board: ");
         debug_table(board);
         
+        
+        //zero out own
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                own[i][j] = 0;
+            }
+        }
         own = get_board(state, "owned_squares", 2, 0);
         debug_table(own);
         
@@ -42,6 +49,9 @@ public class ContestServer {
     public Integer get_bid(List<Integer> offer, Map state) {
         log.info("get_bid");
         log.info(offer.toString());
+        
+        get_begin_var(state);
+        
         return new Integer(4);
     }
 
@@ -103,5 +113,10 @@ public class ContestServer {
             }
         }
         return temp_board;
+    }
+    
+    //Called at the beginning of each round
+    public void get_begin_var(Map state) {
+        
     }
 }
