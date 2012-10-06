@@ -132,13 +132,66 @@ public class Element {
     
     public int longest_link(int[][] ref_board, int[][] placement_board){
         
-        //push row/col number if connected
+        //one for the element calling this function
+        int result = 1;
         
-        //find the max and min row/col difference
+        int x_min = -1;
+        int x_max = 1;
+        int y_min = -1;
+        int y_max = 1;
         
-        return 0;
+        Element temp_val;
+        Vector< Element > queue = new Vector< Element >();
+        
+        //add value to the first position in the queue
+        queue.add(new Element(-1, value, ref_board));
+        
+        while(!queue.isEmpty()) {
+        
+            temp_val = queue.remove(0);
+            
+            x_min = -1;
+            x_max = 1;
+            y_min = -1;
+            y_max = 1;
+            
+            //Check bounds
+            if (temp_val.x == 0) {
+                x_min = 0;
+            }
+            
+            if (temp_val.x == 6) {
+                x_max = 0;
+            }
+            
+            if (temp_val.y == 0) {
+                y_min = 0;
+            }
+       
+            if (temp_val.y == 6) {
+                y_max = 0;
+            }
+            
+            for(int i = x_min; i <= x_max; i++) {
+                for( int j = y_min; j <= y_max; j++) {
+                    if (i == 0 && j == 0) {
+                        //This is value post
+                    }
+                    else if (placement_board[temp_val.x + i][temp_val.y + j] == 0) {
+                        
+                        //Mark as empty b/c we counted it
+                        placement_board[temp_val.x + i][temp_val.y + j] = -1;
+                        result++;
+                    }
+                }
+            }
+            
+        }
+        
+        return result;
     }
     
+    //Returns true if dest is connected to Element
     public boolean is_connected(int dest, int[][] ref_board) {
     
         int x_min = -1;
@@ -174,6 +227,46 @@ public class Element {
             }
         }
         return false;
+    }
+    
+    //REQUIRES: your pieces are 0 on the placement_board
+    public int num_connected(int[][] placement_board, int[][] ref_board) {
+        
+        int result = 0;
+        
+        int x_min = -1;
+        int x_max = 1;
+        int y_min = -1;
+        int y_max = 1;
+        
+        //Check bounds
+        if (x == 0) {
+            x_min = 0;
+        }
+        
+        if (x == 6) {
+            x_max = 0;
+        }
+        
+        if (y == 0) {
+            y_min = 0;
+        }
+   
+        if (y == 6) {
+            y_max = 0;
+        }
+        
+        for(int i = x_min; i <= x_max; i++) {
+            for( int j = y_min; j <= y_max; j++) {
+                if (i == 0 && j == 0) {
+                    //This is value post
+                }
+                else if (placement_board[x + i][y + j] == 0) {
+                    result++;
+                }
+            }
+        }
+        return result;
     }
 
 }
