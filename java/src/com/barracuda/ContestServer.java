@@ -14,8 +14,8 @@ import java.util.*;
 
 public class ContestServer {
     
-    private int[][] board = new int[7][7];
-    private int[][] own = new int[7][7];
+    private int[][] ref_board = new int[7][7];
+    private int[][] place_board = new int[7][7];
 
    
     private static Log log = LogFactory.getLog(ContestServer.class);
@@ -29,19 +29,17 @@ public class ContestServer {
         log.info("init_game");
         log.info(state.toString());
         
-        board = get_board(state, "board", 7, 7);
+        ref_board = get_board(state, "board", 7, 7);
         log.info("Board: ");
-        debug_table(board);
+        debug_table(ref_board);
         
         
         //zero out own
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
-                own[i][j] = 0;
+                place_board[i][j] = 0;
             }
         }
-        own = get_board(state, "owned_squares", 2, 0);
-        debug_table(own);
         
         return 0;
     }
@@ -119,4 +117,5 @@ public class ContestServer {
     public void get_begin_var(Map state) {
         
     }
+    
 }
