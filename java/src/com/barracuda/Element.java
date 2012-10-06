@@ -16,9 +16,7 @@ public class Element {
     public int x;
     //y is horizontal
     public int y;
-    
-    public int offset;
-    
+        
     //REQUIRES: board is 7x7
     public Element(int in_owner, int in_value, int[][] board) {
         
@@ -43,6 +41,7 @@ public class Element {
     //REQUIRE: placement_board empty spots are -1
     public int shortest_path(int dest, int[][] placement_board, int[][] ref_board) {
         
+        boolean found = false;
         //Check if dest is value
         if (dest == value) {
             return 0;
@@ -61,7 +60,7 @@ public class Element {
             
             //Check if dest
             if (temp_val.value == dest) {
-                break;
+                found = true;
             }
             
             //Check and enqueue valid adjacent
@@ -74,56 +73,57 @@ public class Element {
                 queue.add(new Element(-1, ref_board[temp_val.x - 1][temp_val.y], ref_board));
             }
             //south
-            else if (temp_val.x < 6 && placement_board[temp_val.x + 1][temp_val.y] == -1) {
+            if (temp_val.x < 6 && placement_board[temp_val.x + 1][temp_val.y] == -1) {
                 
                 //Mark as visited with current distance
                 placement_board[temp_val.x + 1][temp_val.y] = placement_board[temp_val.x][temp_val.y] + 1;
                 queue.add(new Element(-1, ref_board[temp_val.x + 1][temp_val.y], ref_board));
             }
             //east
-            else if (temp_val.y < 6 && placement_board[temp_val.x][temp_val.y + 1] == -1) {
+            if (temp_val.y < 6 && placement_board[temp_val.x][temp_val.y + 1] == -1) {
                 
                 //Mark as visited with current distance
                 placement_board[temp_val.x][temp_val.y + 1] = placement_board[temp_val.x][temp_val.y] + 1;
                 queue.add(new Element(-1, ref_board[temp_val.x][temp_val.y + 1], ref_board));
             }
             //west
-            else if (temp_val.y > 0 && placement_board[temp_val.x][temp_val.y - 1] == -1) {
+            if (temp_val.y > 0 && placement_board[temp_val.x][temp_val.y - 1] == -1) {
                 
                 //Mark as visited with current distance
                 placement_board[temp_val.x][temp_val.y - 1] = placement_board[temp_val.x][temp_val.y] + 1;
                 queue.add(new Element(-1, ref_board[temp_val.x][temp_val.y - 1], ref_board));
             }
             //ne
-            else if (temp_val.x > 0 && temp_val.y < 6 && placement_board[temp_val.x - 1][temp_val.y + 1] == -1) {
+            if (temp_val.x > 0 && temp_val.y < 6 && placement_board[temp_val.x - 1][temp_val.y + 1] == -1) {
                 
                 //Mark as visited with current distance
                 placement_board[temp_val.x - 1][temp_val.y + 1] = placement_board[temp_val.x][temp_val.y] + 1;
                 queue.add(new Element(-1, ref_board[temp_val.x - 1][temp_val.y + 1], ref_board));
             }
             //nw
-            else if (temp_val.x > 0 && temp_val.y > 0 && placement_board[temp_val.x - 1][temp_val.y - 1] == -1) {
+            if (temp_val.x > 0 && temp_val.y > 0 && placement_board[temp_val.x - 1][temp_val.y - 1] == -1) {
                 
                 //Mark as visited with current distance
                 placement_board[temp_val.x - 1][temp_val.y - 1] = placement_board[temp_val.x][temp_val.y] + 1;
                 queue.add(new Element(-1, ref_board[temp_val.x - 1][temp_val.y - 1], ref_board));
             }
             //se
-            else if (temp_val.x < 6 && temp_val.y < 6 && placement_board[temp_val.x + 1][temp_val.y + 1] == -1) {
+            if (temp_val.x < 6 && temp_val.y < 6 && placement_board[temp_val.x + 1][temp_val.y + 1] == -1) {
                 
                 //Mark as visited with current distance
                 placement_board[temp_val.x + 1][temp_val.y + 1] = placement_board[temp_val.x][temp_val.y] + 1;
                 queue.add(new Element(-1, ref_board[temp_val.x + 1][temp_val.y + 1], ref_board));
             }
             //sw
-            else if (temp_val.x < 6 && temp_val.y > 0 && placement_board[temp_val.x + 1][temp_val.y - 1] == -1) {
+            if (temp_val.x < 6 && temp_val.y > 0 && placement_board[temp_val.x + 1][temp_val.y - 1] == -1) {
                 
                 //Mark as visited with current distance
                 placement_board[temp_val.x + 1][temp_val.y - 1] = placement_board[temp_val.x][temp_val.y] + 1;
                 queue.add(new Element(-1, ref_board[temp_val.x + 1][temp_val.y - 1], ref_board));
             }
+            
         }
-        while(!queue.isEmpty());
+        while(!queue.isEmpty() && !found);
         //While the queue is not empty or found the dest
         
         
@@ -146,6 +146,8 @@ public class Element {
         if (dest == value) {
             return 0;
         }
+        
+        boolean found = false;
         
         //Re-assign values in placement_board
         for(int i = 0; i < 7; i++) {
@@ -171,7 +173,7 @@ public class Element {
             
             //Check if dest
             if (temp_val.value == dest) {
-                break;
+                found = true;
             }
             
             //Check and enqueue valid adjacent
@@ -193,7 +195,7 @@ public class Element {
                 }
             }
             //south
-            else if (temp_val.x < 6 && placement_board[temp_val.x + 1][temp_val.y] <= -1) {
+            if (temp_val.x < 6 && placement_board[temp_val.x + 1][temp_val.y] <= -1) {
                 
                 //Mark as visited with current distance
                 if (placement_board[temp_val.x + 1][temp_val.y] == -1) {
@@ -207,7 +209,7 @@ public class Element {
                 }
             }
             //east
-            else if (temp_val.y < 6 && placement_board[temp_val.x][temp_val.y + 1] <= -1) {
+            if (temp_val.y < 6 && placement_board[temp_val.x][temp_val.y + 1] <= -1) {
                 
                 //Mark as visited with current distance
                 if (placement_board[temp_val.x][temp_val.y + 1] == -1) {
@@ -221,7 +223,7 @@ public class Element {
                 }
             }
             //west
-            else if (temp_val.y > 0 && placement_board[temp_val.x][temp_val.y - 1] <= -1) {
+            if (temp_val.y > 0 && placement_board[temp_val.x][temp_val.y - 1] <= -1) {
                 
                 //Mark as visited with current distance
                 if (placement_board[temp_val.x][temp_val.y - 1] == -1) {
@@ -234,7 +236,7 @@ public class Element {
                 }
             }
             //ne
-            else if (temp_val.x > 0 && temp_val.y < 6 && placement_board[temp_val.x - 1][temp_val.y + 1] <= -1) {
+            if (temp_val.x > 0 && temp_val.y < 6 && placement_board[temp_val.x - 1][temp_val.y + 1] <= -1) {
                 
                 //Mark as visited with current distance
                 if (placement_board[temp_val.x - 1][temp_val.y + 1] == -1) {
@@ -247,7 +249,7 @@ public class Element {
                 }
             }
             //nw
-            else if (temp_val.x > 0 && temp_val.y > 0 && placement_board[temp_val.x - 1][temp_val.y - 1] <= -1) {
+            if (temp_val.x > 0 && temp_val.y > 0 && placement_board[temp_val.x - 1][temp_val.y - 1] <= -1) {
                 
                 //Mark as visited with current distance
                 if (placement_board[temp_val.x - 1][temp_val.y - 1] == -1) {
@@ -260,7 +262,7 @@ public class Element {
                 }
             }
             //se
-            else if (temp_val.x < 6 && temp_val.y < 6 && placement_board[temp_val.x + 1][temp_val.y + 1] <= -1) {
+            if (temp_val.x < 6 && temp_val.y < 6 && placement_board[temp_val.x + 1][temp_val.y + 1] <= -1) {
                 
                 //Mark as visited with current distance
                 if (placement_board[temp_val.x + 1][temp_val.y + 1] == -1) {
@@ -273,7 +275,7 @@ public class Element {
                 }
             }
             //sw
-            else if (temp_val.x < 6 && temp_val.y > 0 && placement_board[temp_val.x + 1][temp_val.y - 1] <= -1) {
+            if (temp_val.x < 6 && temp_val.y > 0 && placement_board[temp_val.x + 1][temp_val.y - 1] <= -1) {
                 
                 //Mark as visited with current distance
                 if (placement_board[temp_val.x + 1][temp_val.y - 1] == -1) {
@@ -285,10 +287,13 @@ public class Element {
                     queue.add(0, new Element(-1, ref_board[temp_val.x + 1][temp_val.y - 1], ref_board));
                 }
             }
+            for(Element i : queue) {
+                System.out.println(i.value);
+            }
+            debug_table(placement_board);
         }
-        while(!queue.isEmpty());
+        while(!queue.isEmpty() && !found);
         //While the queue is not empty or found the dest
-        
         
         //Check if found
         if (temp_val.value == dest) {
@@ -451,6 +456,18 @@ public class Element {
         else {
             return Math.abs(dest_elt.x - x);
         }
+    }
+    
+    public void debug_table(int[][] b) {
+        
+        String output = "" + '\n';
+        for (int[] row : b) {
+            for (int cell : row) {
+                output += cell + ", ";
+            }
+            output += '\n';
+        }
+        System.out.print(output);
     }
 
 }

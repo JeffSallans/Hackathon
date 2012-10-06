@@ -21,6 +21,8 @@ public class ContestServer {
     int player_num;
     GameMode gamemode;
     
+    Element root;
+    
     public int[][] ref_board = new int[7][7];
     public int[][] place_board = new int[7][7];
     
@@ -63,6 +65,15 @@ public class ContestServer {
     public Integer make_choice(List<Integer> offer, Map state) {
         log.info("make_choice");
         get_vars(offer, state);
+
+        Element temp_elt = new Element(-1, offer.get(0), ref_board);
+        
+        System.out.print(temp_elt.ghost_shortest_path(14, place_board, ref_board));
+        
+        for(int i = 0; i < 7; i++) {
+            
+        }
+        //ArrayList< Target > targets = 
         
         return offer.get(0);
     }
@@ -150,6 +161,11 @@ public class ContestServer {
         for (int i = 0; i < 2; i++) {
             Object[] row = (Object[]) all[i];
             for (int j = 0; j < row.length; j++) {
+                
+                //Set root for determining next move
+                if (j == 0) {
+                    root = new Element(0, (int)row[j], ref_board);
+                }
                 temp_elt = new Element(i, (int)row[j], ref_board);
                 place_board[temp_elt.x][temp_elt.y] = i;
             }
