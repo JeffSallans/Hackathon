@@ -30,6 +30,11 @@ public class ContestServer {
     public int init_game(Map state) {
         log.info("init_game");
         log.info(state.toString());
+        //player_num = (int) state.get("idx");
+        //bid.set_things((int) state.get("turn"), (int) state.get("credits"));
+        
+        
+        
         
         board = get_board(state, "board", 7, 7);
         log.info("Board: ");
