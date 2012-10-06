@@ -81,7 +81,7 @@ public class ContestServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 9995;
+        int port = 9993;
         WebServer webServer = new WebServer(port);
         XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
         PropertyHandlerMapping phm = new PropertyHandlerMapping();
@@ -146,19 +146,15 @@ public class ContestServer {
         
         //Get
         Element temp_elt;
-        int j;
         Object[] all = (Object[]) state.get("owned_squares");
         for (int i = 0; i < 2; i++) {
             Object[] row = (Object[]) all[i];
-            j = 0;
-            while (row != null && row[j] != null ) {
+            for (int j = 0; j < row.length; j++) {
                 temp_elt = new Element(i, (int)row[j], ref_board);
                 place_board[temp_elt.x][temp_elt.y] = i;
-                j++;
             }
         }
         
         debug_table(place_board);
-        
     }
 }
