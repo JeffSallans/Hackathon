@@ -10,10 +10,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.lang.Math;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ContestServer {
+    
+    private int[][] board = new int[7][7];
+   
     private static Log log = LogFactory.getLog(ContestServer.class);
 
     public Boolean ping() {
@@ -24,6 +26,24 @@ public class ContestServer {
     public int init_game(Map state) {
         log.info("init_game");
         log.info(state.toString());
+        
+        Object[] all = (Object[]) state.get("board");
+        for( int i = 0; i < 7; i++) {
+            Object[] row = (Object[]) all[i];
+            for( int j = 0; j < 7; j++) {
+                board[i][j] = (Integer) row[j];
+            }
+        }
+        
+        String output = "" + '\n';
+        for (int[] row : board) {
+            for (int cell : row) {
+                output += cell + ", ";
+            }
+            output += '\n';
+        }
+        log.info(output);
+        
         return 0;
     }
 
@@ -51,7 +71,7 @@ public class ContestServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 8888;
+        int port = 9997;
         WebServer webServer = new WebServer(port);
         XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
         PropertyHandlerMapping phm = new PropertyHandlerMapping();
