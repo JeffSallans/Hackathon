@@ -21,35 +21,37 @@ public class ContestServer {
         return true;
     }
 
-    public void init_game(Map state) {
+    public int init_game(Map state) {
         log.info("init_game");
         log.info(state.toString());
+        return 0;
     }
 
     public Integer get_bid(List<Integer> offer, Map state) {
         log.info("get_bid");
         log.info(offer.toString());
         return new Integer(4);
-        //(int)Math.random() * 3);
     }
 
     public Integer make_choice(List<Integer> offer, Map state) {
         log.info("make_choice");
-        return offer.get((int)Math.random() * offer.size());
+        return offer.get(0);
     }
 
-    public void move_result(Map result) {
+    public int move_result(Map result) {
         log.info("move_result");
         log.info(result.toString());
+        return 0;
     }
 
-    public void game_result(Map result) {
+    public int game_result(Map result) {
         log.info("game_result");
         log.info(result.toString());
+        return 0;
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 9999;
+        int port = 8888;
         WebServer webServer = new WebServer(port);
         XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
         PropertyHandlerMapping phm = new PropertyHandlerMapping();
