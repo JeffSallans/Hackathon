@@ -9,13 +9,21 @@ import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.barracuda.Bidding.GameMode;
+
 import java.lang.Math;
 import java.util.*;
 
 public class ContestServer {
     
+    Bidding bet = new Bidding();
+    public int player_num;
+    GameMode gamemode;
+    
     private int[][] ref_board = new int[7][7];
     private int[][] place_board = new int[7][7];
+    
+    //occupancy lists
     List<Integer> own_occ = new ArrayList<>();
     List<Integer> opp_occ = new ArrayList<>();
 
@@ -30,6 +38,9 @@ public class ContestServer {
     public int init_game(Map state) {
         log.info("init_game");
         log.info(state.toString());
+        
+        player_num = (int) state.get("idx");
+        gamemode = GameMode.start;
         
         ref_board = get_board(state, "board", 7, 7);
         log.info("Board: ");
@@ -50,9 +61,11 @@ public class ContestServer {
         log.info("get_bid");
         log.info(offer.toString());
         
-        get_begin_var(state);
+        get_begin_var(state, (int) state.get("idx"));
         
-        return new Integer(4);
+        
+        return 4;
+        //return bet.calc_bet();
     }
 
     public Integer make_choice(List<Integer> offer, Map state) {
@@ -68,10 +81,12 @@ public class ContestServer {
         if (result.get("result") == "you_choose")
         {
             own_occ.add((Integer) result.get("choice"));
+
         }
         else if (result.get("result") == "opponent_choose")
         {
             opp_occ.add((Integer) result.get("choice"));
+            bet.end_round_calc();
         }
         
         return 0;
@@ -127,7 +142,12 @@ public class ContestServer {
     }
     
     //Called at the beginning of each round
-    public void get_begin_var(Map state) {
-        
+    public void get_begin_var(Map state, int playernum) 
+    {
+        if (own_occ.size() > 0)
+        {
+            gamemode = GameMode.middle;
+        }
+        bet.set_things(gamemode, playernum ,(int) state.get("turn"), (int) state.get("credits"));    
     }
 }
