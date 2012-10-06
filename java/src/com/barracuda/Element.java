@@ -1,10 +1,15 @@
 package com.barracuda;
 
 import java.util.*;
+import java.io.*;
 
 public class Element {
     
+    //-1 is empty
+    //0 is self owned
+    //1 is opp owned
     public int owner;
+    
     public int value;
     
     //x is vertical
@@ -22,6 +27,7 @@ public class Element {
         
         for(int i = 0; i < 7; i++) {
             for(int j = 0; j < 7; j++) {
+                //System.out.println(i+", "+j+", "+board[i][j]+"=="+ value);
                 if (board[i][j] == value) {
                     //Leave for loop
                     x = i;
