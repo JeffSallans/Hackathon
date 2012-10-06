@@ -15,6 +15,7 @@ import java.util.*;
 public class ContestServer {
     
     private int[][] board = new int[7][7];
+    public List<Integer> avail_spots = new ArrayList<>();
    
     private static Log log = LogFactory.getLog(ContestServer.class);
 
@@ -28,6 +29,8 @@ public class ContestServer {
         log.info(state.toString());
         
         board = get_board(state);
+        
+        
         log.info("Board: ");
         debug_table(board);
         
@@ -37,6 +40,8 @@ public class ContestServer {
     public Integer get_bid(List<Integer> offer, Map state) {
         log.info("get_bid");
         log.info(offer.toString());
+        avail_spots = offer;
+        
         return new Integer(4);
     }
 
