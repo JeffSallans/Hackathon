@@ -70,12 +70,22 @@ public class ContestServer {
         
         System.out.print(temp_elt.ghost_shortest_path(14, place_board, ref_board));
         
-        for(int i = 0; i < 7; i++) {
-            
+        int index = 0;
+        ArrayList<Target> targets = null;
+        {
+        	int min = 50;
+	        for(int i = 0; i < targets.size(); i++) {
+	            Target temp = targets.get(i);
+	            if(temp.s_path_to_goal1 + temp.s_path_to_root <= min)
+	            	min = temp.s_path_to_goal1 + temp.s_path_to_root;
+	            if(temp.s_path_to_goal2 + temp.s_path_to_root <= min)
+	            	min = temp.s_path_to_goal2 + temp.s_path_to_root;
+	            index = i;
+	        }
         }
         //ArrayList< Target > targets = 
         
-        return offer.get(0);
+        return offer.get(index);
     }
 
     public int move_result(Map result) {
