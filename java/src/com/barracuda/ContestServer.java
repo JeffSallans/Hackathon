@@ -15,6 +15,8 @@ import java.util.*;
 public class ContestServer {
     
     private int[][] board = new int[7][7];
+    private int[][] own = new int[7][7];
+
    
     private static Log log = LogFactory.getLog(ContestServer.class);
 
@@ -27,9 +29,12 @@ public class ContestServer {
         log.info("init_game");
         log.info(state.toString());
         
-        board = get_board(state);
+        board = get_board(state, "board", 7, 7);
         log.info("Board: ");
         debug_table(board);
+        
+        own = get_board(state, "owned_squares", 2, 0);
+        debug_table(own);
         
         return 0;
     }
@@ -58,7 +63,7 @@ public class ContestServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 9999;
+        int port = 9998;
         WebServer webServer = new WebServer(port);
         XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
         PropertyHandlerMapping phm = new PropertyHandlerMapping();
@@ -86,14 +91,14 @@ public class ContestServer {
     }
     
     //EFFECT: Returns 7x7 board
-    public int[][] get_board(Map state) {
+    public int[][] get_board(Map state, String type, int x, int y) {
         
-        int[][] temp_board = new int[7][7];
+        int[][] temp_board = new int[x][y];
         
-        Object[] all = (Object[]) state.get("board");
-        for( int i = 0; i < 7; i++) {
+        Object[] all = (Object[]) state.get(type);
+        for( int i = 0; i < x; i++) {
             Object[] row = (Object[]) all[i];
-            for( int j = 0; j < 7; j++) {
+            for( int j = 0; j < y; j++) {
                 temp_board[i][j] = (Integer) row[j];
             }
         }
