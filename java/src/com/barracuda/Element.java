@@ -433,5 +433,18 @@ public class Element {
         }
         return result;
     }
+    
+    //REQUIRE: dest is in ref_board
+    public int offset(int dest, int[][] ref_board, boolean horizontal_offset) {
+        
+        Element dest_elt = new Element(-1, dest, ref_board);
+        
+        if (horizontal_offset) {
+            return Math.abs(dest_elt.y - y);
+        }
+        else {
+            return Math.abs(dest_elt.x - x);
+        }
+    }
 
 }
