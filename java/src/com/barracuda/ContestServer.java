@@ -16,6 +16,8 @@ public class ContestServer {
     
     private int[][] ref_board = new int[7][7];
     private int[][] place_board = new int[7][7];
+    List<Integer> own_occ = new ArrayList<>();
+    List<Integer> opp_occ = new ArrayList<>();
 
    
     private static Log log = LogFactory.getLog(ContestServer.class);
@@ -61,6 +63,17 @@ public class ContestServer {
     public int move_result(Map result) {
         log.info("move_result");
         log.info(result.toString());
+        
+  
+        if (result.get("result") == "you_choose")
+        {
+            own_occ.add((Integer) result.get("choice"));
+        }
+        else if (result.get("result") == "opponent_choose")
+        {
+            opp_occ.add((Integer) result.get("choice"));
+        }
+        
         return 0;
     }
 
@@ -117,5 +130,4 @@ public class ContestServer {
     public void get_begin_var(Map state) {
         
     }
-    
 }
